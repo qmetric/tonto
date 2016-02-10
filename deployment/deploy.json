@@ -1,0 +1,14 @@
+{
+  "name": "tonto",
+  "strategy": "default",
+  "assets": [
+    {
+      "type": "file",
+      "src": "tonto.jar",
+      "dest": "~/tonto.jar"
+    },
+    {
+      "type": "service_script"
+    }
+  ]
+}
