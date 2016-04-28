@@ -41,14 +41,27 @@ class StubLoanRangerService {
             def jsonSlurper = new JsonSlurper()
             def object = jsonSlurper.parseText(request.body())
 
+            def customerName = ""
             def accountNumber = object.bankAccount.accountNumber as String
+            customerName += object.customer.name.title as String
+            customerName += " "
+            customerName += object.customer.name.first as String
+            customerName += " "
+            customerName += object.customer.name.last as String
 
-            if(accountNumber == "99999999") {
-                '''{"status":"REJECTED","clientReference":"''' + generateClientReference() + '''","errorCode":"CCD_Declined","message":"There is a problem with this transaction. Please transfer to the Customer Service team"}'''
-            } else if(accountNumber == "88888888") {
+            def sortCode = object.bankAccount.sortCode as String
+
+            if(sortCode == "938611" && accountNumber == "02149187" && customerName.equalsIgnoreCase("mr test review"))
+            {
                 '''{"status":"PENDING","clientReference":"''' + generateClientReference() + '''","message":"Transaction is undergoing a review for CCD checks"}'''
-            } else {
+            }
+            else if (accountNumber == "02149187" && sortCode == "938611")
+            {
                 '''{"status": "SUCCESS","clientReference": "''' + generateClientReference() + '''","loanReference": "WEGAVEHIMEMONEY01"}'''
+            }
+            else
+            {
+                '''{"status":"REJECTED","clientReference":"''' + generateClientReference() + '''","errorCode":"CCD_Declined","message":"There is a problem with this transaction. Please transfer to the Customer Service team"}'''
             }
         })
     }
