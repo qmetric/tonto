@@ -64,5 +64,11 @@ class StubLoanRangerService {
                 '''{"status":"REJECTED","clientReference":"''' + generateClientReference() + '''","errorCode":"CCD_Declined","message":"There is a problem with this transaction. Please transfer to the Customer Service team"}'''
             }
         })
+
+        post("/timeout", { request, response -> Thread.sleep(70000)})
+
     }
+
+
+
 }
