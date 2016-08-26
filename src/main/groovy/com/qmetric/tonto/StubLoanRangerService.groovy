@@ -38,7 +38,6 @@ class StubLoanRangerService {
         })
 
         post("/direct-debits", { request, response ->
-            Thread.sleep(70000)
             def jsonSlurper = new JsonSlurper()
             def object = jsonSlurper.parseText(request.body())
 
