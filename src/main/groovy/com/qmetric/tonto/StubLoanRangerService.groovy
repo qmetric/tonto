@@ -38,6 +38,7 @@ class StubLoanRangerService {
         })
 
         post("/direct-debits", { request, response ->
+            Thread.sleep(70000)
             def jsonSlurper = new JsonSlurper()
             def object = jsonSlurper.parseText(request.body())
 
@@ -64,8 +65,6 @@ class StubLoanRangerService {
                 '''{"status":"REJECTED","clientReference":"''' + generateClientReference() + '''","errorCode":"CCD_Declined","message":"There is a problem with this transaction. Please transfer to the Customer Service team"}'''
             }
         })
-
-        post("/timeout", { request, response -> Thread.sleep(70000)})
 
     }
 
