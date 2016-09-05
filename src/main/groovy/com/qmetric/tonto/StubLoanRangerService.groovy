@@ -14,6 +14,8 @@ class StubLoanRangerService {
 
     private static final char[] POSSIBLE_ID_CHARS = "abcdefghijklmnopqrstuvwxyz_0123456789".toCharArray()
 
+    def private static String ERROR_CODE;
+
     static def generateClientReference()
     {
         final StringBuilder id = new StringBuilder();
@@ -61,8 +63,32 @@ class StubLoanRangerService {
             }
             else
             {
-                '''{"status":"REJECTED","clientReference":"''' + generateClientReference() + '''","errorCode":"CCD_Declined","message":"There is a problem with this transaction. Please transfer to the Customer Service team"}'''
+                if(ERROR_CODE == null)
+                {
+                    ERROR_CODE = "CCD_Declined"
+                }
+                '''{"status":"REJECTED","clientReference":"''' + generateClientReference() + '''","errorCode":"''' + ERROR_CODE + '''","message":"There is a problem with this transaction. Please transfer to the Customer Service team"}'''
             }
+        })
+
+        post("/set-error-code", { request, response ->
+            try
+            {
+                def jsonSlurper = new JsonSlurper()
+                def object = jsonSlurper.parseText(request.body())
+
+                ERROR_CODE = object.errorCode;
+                if(ERROR_CODE == null)
+                {
+                    throw new Exception("Failed to set error code.")
+                }
+            }
+            catch (Exception e)
+            {
+                response.status(500);
+                return "NOK"
+            }
+            "OK"
         })
 
     }
